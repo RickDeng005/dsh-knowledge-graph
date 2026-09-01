@@ -1,6 +1,6 @@
 {
   "name": "dsh-knowledge-graph",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "DSH 知识图谱插件：可视化插件/技能/工具、依赖关系与使用统计，可回看每轮思考过程与工具调用轨迹 | Visualize installed plugins/skills/tools, dependencies & usage stats, with per-turn thinking/tool-call trace.",
   "type": "module",
   "main": "lib/index.js",
