@@ -1,20 +1,54 @@
 # dsh-knowledge-graph · DSH 知识图谱插件
 
-把「你装了哪些插件 / 技能 / 工具、它们之间的依赖关系、以及每轮对话里调用了什么、想了什么」可视化出来。
+把「你装了哪些插件 / 技能 / 工具、它们之间是什么关系、以及每轮对话里到底调用了什么、想了什么」全部可视化出来。
 
-Visualize the plugins / skills / tools you have installed, their dependency relations, and what each conversation turn actually called and reasoned about.
+Visualize what plugins / skills / tools you have installed, how they relate to each other, and exactly what each conversation turn called and reasoned about.
 
 [![Listed on dsh-plugin.org](https://dsh-plugin.org/badges/listed.svg)](https://dsh-plugin.org/plugins/rickdeng005/dsh-knowledge-graph)
 
-## 功能 · Features
+---
 
-- **力导向图谱 · Force-directed graph**：插件 / 技能 / 工具以节点呈现，丝滑物理仿真布局；依赖（`depends`）与全家桶包含关系（`contains`）以连线 + 凸包气泡圈出。
-- **清单视图 · List view**：插件 / 技能 / 工具三个页签，可搜索、按图层过滤。
-- **每轮思考过程 · Per-turn thinking**：选中某个对话轮次后，高亮该轮调用的工具（序号徽标 + 调用箭头），并把思考（💭）与回复（💬）画成气泡；点气泡看全文、点空白收起。
-- **使用统计 · Usage stats**：每个节点显示调用次数、最近使用时间；「上一轮调用」一键聚焦最新一轮。
-- **健康诊断 · Health diagnosis**：加载失败 🔴 / 被禁用 ⚪ 在外环标注。
-- **导出报告 · Export report**：一键导出 Markdown 使用报告。
-- **本地持久化 · Local persistence**：统计与历史保存在本地，重启不丢。
+## 它解决了什么问题 · Why this plugin
+
+DeepSeek Harness 是「一切皆插件」。用久了之后，你会遇到这些麻烦：
+
+1. **装了什么心里没数** —— 插件、技能、工具越装越多，几十上百个，根本记不清自己装了啥、哪个是干嘛的。
+2. **看不见依赖关系** —— 插件之间有 `peerDependencies`（依赖）和「全家桶包含」关系，少了某个依赖，功能莫名其妙就坏了，但你不知道哪里断了。
+3. **不知道 AI 到底干了什么** —— 每轮对话里，助手调用了哪些工具、思考了什么、最后怎么回复的，全是黑盒；想排查问题或理解行为只能靠猜。
+4. **装了一堆「吃灰」的东西** —— 有些插件/工具装上后从没用过，白白占着，还干扰判断。
+
+这个插件把这四件事一次性解决：**一张图谱看懂全局，一条轨迹看懂每一轮。**
+
+---
+
+## 功能特性 · Features
+
+- **力导向图谱 · Force-directed graph**
+  插件 / 技能 / 工具以节点呈现，丝滑的物理仿真布局；依赖关系（`depends`）以连线表示，「全家桶包含关系」（`contains`）用凸包气泡圈成一簇，一眼看清哪些是一家人。
+- **清单视图 · List view**
+  插件 / 技能 / 工具三个页签，支持按名称搜索、按图层过滤，比图谱更适合精确查找。
+- **每轮思考过程 · Per-turn thinking**
+  选中某个对话轮次后，图谱会高亮该轮调用的工具（带序号徽标 + 调用箭头），并把思考（💭）与回复（💬）画成气泡；**点气泡看全文，点空白收起**；点工具节点，它对应的思考气泡会一起高亮。
+- **使用统计 · Usage stats**
+  每个节点显示「用过几次、最近什么时候用的、最近在哪些轮次被调用」；「上一轮调用」一键聚焦最新一轮。
+- **健康诊断 · Health diagnosis**
+  加载失败的插件红圈 🔴、被禁用的插件灰圈 ⚪，直接在节点外环标出来，一眼定位坏掉的插件。
+- **导出报告 · Export report**
+  一键导出 Markdown 报告：概览 / 问题插件 / 吃灰清单 / 使用排行。
+- **本地持久化 · Local persistence**
+  统计与历史保存在本地（`~/.dsh/kg-knowledge-graph.json`），重启不丢。
+
+---
+
+## 使用场景 · Use Cases
+
+- **盘点 / 审计**：想知道自己环境里到底装了多少插件、技能、工具，哪些加载失败、哪些被禁用 —— 打开图谱一目了然。
+- **排查依赖问题**：某个功能不工作，怀疑是依赖断了 —— 打开「全显依赖」看关系边，或看某个插件的依赖气泡。
+- **复盘对话**：想知道 AI 刚才那一轮「调用了哪些工具、怎么一步步思考的」—— 用轮次选择器回看任意一轮的思考轨迹。
+- **清理「吃灰」**：找出从没用过的插件/工具，卸载瘦身 —— 用「吃灰清单」或导出报告里的清单。
+- **学习 DSH 生态**：新手快速了解 DSH 到底有哪些能力、工具都长什么样、中文用途说明。
+
+---
 
 ## 安装 · Install
 
@@ -22,14 +56,20 @@ Visualize the plugins / skills / tools you have installed, their dependency rela
 dsh plugin --profile web add dsh-knowledge-graph
 ```
 
-## 使用 · Usage
+## 快速上手 · Quick Start
 
-安装后在右侧栏打开「**插件图谱**」页签（没有 web-ui 侧栏的环境会自动退化为右下角悬浮入口）。
+1. 安装后，在右侧栏打开「**插件图谱**」页签（没有 web-ui 侧栏的环境会自动退化为右下角悬浮按钮）。
+2. 默认是「图谱」视图，滚轮缩放、拖拽平移、点击节点看详情。
+3. 点底部「上一轮调用」或下拉框选一个轮次，即可查看该轮的思考气泡与调用轨迹。
 
-Open the "插件图谱" tab in the right sidebar after installing (falls back to a floating button if no web-ui sidebar is present).
+## 详细使用说明 · Usage
 
-- 顶部工具栏：搜索、`上一轮调用`、`全显依赖`、图层切换、`刷新`、`导出报告`。
-- 图谱底部：`‹ 上一轮 / 下拉选轮 / 下一轮 ›` 轮次选择器，选中轮次即展示思考气泡与调用轨迹。
+- **顶部工具栏**：搜索框（过滤节点）、`上一轮调用`（聚焦最新一轮）、`全显依赖`（显示/隐藏依赖边）、图层切换（插件/技能/工具）、`刷新`（重新枚举）、`导出报告`（下载 Markdown）。
+- **图谱交互**：滚轮缩放、按住空白拖拽平移、点击节点选中并显示详情（用途 / 使用次数 / 最近使用 / 问题诊断）、点击「重置视图」回到全图。
+- **轮次选择器**（图谱底部）：`‹ 上一轮 / 下拉选轮 / 下一轮 ›`；选中某轮后，该轮调用的工具会高亮 + 序号 + 箭头，思考/回复以气泡显示；点气泡看全文。
+- **图例**：图谱顶部一行图例，说明节点颜色、连线类型、问题外环的含义。
+
+---
 
 ## 兼容性与权限 · Compatibility & Permissions
 
