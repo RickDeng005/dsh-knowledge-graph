@@ -1,0 +1,5 @@
+# dsh-knowledge-graph bundle patch
+# 安装后由 `dsh plugin --profile web add` 挂载本行，宿主侧注册 webServer 路由与事件监听。
+- insert:
+    - id: knowledge-graph
+      name: 'dsh-knowledge-graph'
